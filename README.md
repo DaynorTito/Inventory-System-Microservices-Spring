@@ -121,26 +121,26 @@ tiende a crecer o se necesite hacer una migracion de BD o de alguna tecnologia e
     
     ```bash
         docker --version
-        docker compose version
+        docker  version
     ```
     
     Si devuelve un error, probar con:
     
     ```bash
-      docker-compose --version
+      docker- --version
     ```
 
 
-3. **Levanta todos los servicios con Docker Compose:**
+3. **Levanta todos los servicios con Docker :**
 
     ```bash
-      docker-compose artifacts/docker-compose.yml up -d
+      docker-compose -f artifacts/docker-compose.yml up -d
     ```
     
     o de forma alternativa
     
     ```bash
-      docker compose artifacts/docker-compose.yml up -d
+      docker compose -f artifacts/docker-compose.yml up -d
     ```
 4. Verifica que los contenedores estén corriendo:
     ```bash
@@ -151,12 +151,12 @@ tiende a crecer o se necesite hacer una migracion de BD o de alguna tecnologia e
 Si se necesita detener los servicios, ejecuta:
 
 ```bash
-  docker-compose artifacts/docker-compose.yml down
+  docker-compose -f artifacts/docker-compose.yml down
 ```
 o de forma alternativa 
 
 ```bash
-  docker compose artifacts/docker-compose.yml down
+  docker compose -f artifacts/docker-compose.yml down
 ```
 
 ## Uso del sistema de inventarios (Postman)
