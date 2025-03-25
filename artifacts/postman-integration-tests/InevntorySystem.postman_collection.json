@@ -1,0 +1,4464 @@
+{
+	"info": {
+		"_postman_id": "4b782c5b-5cf0-4c03-b2b7-e6b46e3675f0",
+		"name": "InevntorySystem",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "30520122"
+	},
+	"item": [
+		{
+			"name": "Brands",
+			"item": [
+				{
+					"name": "brand",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Guardar ID del Brand en variable de colección\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    var idBrand = responseJson.id;",
+									"    pm.collectionVariables.set(\"IdBrand\", idBrand);",
+									"",
+									"    pm.expect(idBrand).to.not.be.null;",
+									"    pm.expect(idBrand).to.not.be.undefined;",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    pm.expect(responseJson).to.have.property(\"name\");",
+									"    pm.expect(responseJson).to.have.property(\"description\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Samsung\",\n    \"description\": \"Aparatos Samsung\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{brandPrefix}}"
+					},
+					"response": []
+				},
+				{
+					"name": "brand duplicate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property(\"error\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\");",
+									"    pm.expect(responseJson).to.have.property(\"status\");",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los mensajes de error\", function () {",
+									"        var responseJson = pm.response.json();",
+									"    pm.expect(responseJson.error).to.eql(\"Marca ya existe\");",
+									"    pm.expect(responseJson.userMessage).to.eql(\"Error de validacion, verifique los detalles e intente nuevamente\");",
+									"    pm.expect(responseJson.status).to.eql(\"BAD_REQUEST\");",
+									"    pm.expect(responseJson.code).to.eql(400);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Samsung\",\n    \"description\": \"Aparatos Samsung\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{brandPrefix}}"
+					},
+					"response": []
+				},
+				{
+					"name": "brand invalid field miss",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property(\"error\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\");",
+									"    pm.expect(responseJson).to.have.property(\"status\");",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los mensajes de error\", function () {",
+									"        var responseJson = pm.response.json();",
+									"    pm.expect(responseJson.error).to.eql(\"Error de validación\");",
+									"    pm.expect(responseJson.userMessage).to.eql(\"El nombre de la marca no puede estar vacio \");",
+									"    pm.expect(responseJson.status).to.eql(\"BAD_REQUEST\");",
+									"    pm.expect(responseJson.code).to.eql(400);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"Aparatos Samsung\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{brandPrefix}}"
+					},
+					"response": []
+				},
+				{
+					"name": "brand/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    pm.expect(responseJson).to.have.property(\"name\");",
+									"    pm.expect(responseJson).to.have.property(\"description\");",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los mensajes de actualizacion\", function () {",
+									"        var responseJson = pm.response.json();",
+									"    pm.expect(responseJson.name).to.eql(\"Sony\");",
+									"    pm.expect(responseJson.description).to.eql(\"Aparatos Samsung\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Sony\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{brandPrefix}}/{{IdBrand}}"
+					},
+					"response": []
+				},
+				{
+					"name": "brand/:id invalid not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property(\"error\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\");",
+									"    pm.expect(responseJson).to.have.property(\"status\");",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los mensajes de error\", function () {",
+									"        var responseJson = pm.response.json();",
+									"    pm.expect(responseJson.error).to.eql(\"Marca no encontrada\");",
+									"    pm.expect(responseJson.userMessage).to.eql(\"Marca no encontrada, verifique los detalles e intente nuevamente\");",
+									"    pm.expect(responseJson.status).to.eql(\"NOT_FOUND\");",
+									"    pm.expect(responseJson.code).to.eql(404);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Sony\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{brandPrefix}}/111111111111"
+					},
+					"response": []
+				},
+				{
+					"name": "brand",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port}}/{{brandPrefix}}"
+					},
+					"response": []
+				},
+				{
+					"name": "brand/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    pm.expect(responseJson).to.have.property(\"name\");",
+									"    pm.expect(responseJson).to.have.property(\"description\");",
+									"    ",
+									"    pm.expect(responseJson.name).to.eql(\"Sony\");",
+									"    pm.expect(responseJson.description).to.eql(\"Aparatos Samsung\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port}}/{{brandPrefix}}/{{IdBrand}}"
+					},
+					"response": []
+				},
+				{
+					"name": "brand/:id not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property(\"error\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\");",
+									"    pm.expect(responseJson).to.have.property(\"status\");",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los mensajes de error\", function () {",
+									"        var responseJson = pm.response.json();",
+									"    pm.expect(responseJson.error).to.eql(\"Marca no encontrada\");",
+									"    pm.expect(responseJson.userMessage).to.eql(\"Marca no encontrada, verifique los detalles e intente nuevamente\");",
+									"    pm.expect(responseJson.status).to.eql(\"NOT_FOUND\");",
+									"    pm.expect(responseJson.code).to.eql(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port}}/{{brandPrefix}}/1223"
+					},
+					"response": []
+				},
+				{
+					"name": "brand/:id not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property(\"error\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\");",
+									"    pm.expect(responseJson).to.have.property(\"status\");",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los mensajes de error\", function () {",
+									"        var responseJson = pm.response.json();",
+									"    pm.expect(responseJson.error).to.eql(\"Marca no encontrada\");",
+									"    pm.expect(responseJson.userMessage).to.eql(\"Marca no encontrada, verifique los detalles e intente nuevamente\");",
+									"    pm.expect(responseJson.status).to.eql(\"NOT_FOUND\");",
+									"    pm.expect(responseJson.code).to.eql(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:{{port}}/{{brandPrefix}}/211111"
+					},
+					"response": []
+				},
+				{
+					"name": "brand/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:{{port}}/{{brandPrefix}}/{{IdBrand}}"
+					},
+					"response": []
+				},
+				{
+					"name": "brand correct",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Guardar ID del Brand en variable de colección\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    var idBrand = responseJson.id;",
+									"    pm.collectionVariables.set(\"IdBrand\", idBrand);",
+									"",
+									"    pm.expect(idBrand).to.not.be.null;",
+									"    pm.expect(idBrand).to.not.be.undefined;",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    pm.expect(responseJson).to.have.property(\"name\");",
+									"    pm.expect(responseJson).to.have.property(\"description\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Samsung\",\n    \"description\": \"Aparatos Samsung\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{brandPrefix}}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    pm.expect(responseJson).to.have.property(\"name\");",
+									"    pm.expect(responseJson).to.have.property(\"description\");",
+									"    ",
+									"    pm.expect(responseJson.name).to.eql(\"Electronica\");",
+									"    pm.expect(responseJson.description).to.eql(\"Dispositivos electronicos\");",
+									"    ",
+									"    pm.collectionVariables.set(\"idCategory\", responseJson.id);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Electronica\",\n    \"description\": \"Dispositivos electronicos\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{categoryPrefix}}"
+					},
+					"response": []
+				},
+				{
+					"name": "category duplicate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"        pm.expect(responseJson).to.have.property(\"error\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\");",
+									"    pm.expect(responseJson).to.have.property(\"status\");",
+									"    pm.expect(responseJson).to.have.property(\"code\");",
+									"});",
+									"",
+									"pm.test(\"El código es 400\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    pm.expect(responseJson.code).to.eql(400);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Electronica\",\n    \"description\": \"Dispositivos electronicos\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{categoryPrefix}}"
+					},
+					"response": []
+				},
+				{
+					"name": "category duplicate field miss",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.have.property(\"error\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\");",
+									"    pm.expect(responseJson).to.have.property(\"status\");",
+									"    pm.expect(responseJson).to.have.property(\"code\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"El código es 400\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson.code).to.eql(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"Dispositivos electronicos\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{categoryPrefix}}"
+					},
+					"response": []
+				},
+				{
+					"name": "category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port}}/{{categoryPrefix}}"
+					},
+					"response": []
+				},
+				{
+					"name": "category:/id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port}}/{{categoryPrefix}}/{{idCategory}}"
+					},
+					"response": []
+				},
+				{
+					"name": "category:/id not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property(\"error\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\");",
+									"    pm.expect(responseJson).to.have.property(\"status\");",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los mensajes de error\", function () {",
+									"        var responseJson = pm.response.json();",
+									"    pm.expect(responseJson.error).to.eql(\"Categoria no encontrada\");",
+									"    pm.expect(responseJson.userMessage).to.eql(\"Categoria no encontrada, verifique los detalles e intente nuevamente\");",
+									"    pm.expect(responseJson.code).to.eql(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port}}/{{categoryPrefix}}/111111"
+					},
+					"response": []
+				},
+				{
+					"name": "category:/id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"Electronicas\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{categoryPrefix}}/{{idCategory}}"
+					},
+					"response": []
+				},
+				{
+					"name": "category:/id not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property(\"error\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\");",
+									"    pm.expect(responseJson).to.have.property(\"status\");",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los mensajes de error\", function () {",
+									"        var responseJson = pm.response.json();",
+									"    pm.expect(responseJson.error).to.eql(\"Categoria no encontrada\");",
+									"    pm.expect(responseJson.userMessage).to.eql(\"Categoria no encontrada, verifique los detalles e intente nuevamente\");",
+									"    pm.expect(responseJson.code).to.eql(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"Electronicas\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{categoryPrefix}}/11111111"
+					},
+					"response": []
+				},
+				{
+					"name": "category:/id not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.property(\"error\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\");",
+									"    pm.expect(responseJson).to.have.property(\"status\");",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los mensajes de error\", function () {",
+									"        var responseJson = pm.response.json();",
+									"    pm.expect(responseJson.error).to.eql(\"Categoria no encontrada\");",
+									"    pm.expect(responseJson.userMessage).to.eql(\"Categoria no encontrada, verifique los detalles e intente nuevamente\");",
+									"    pm.expect(responseJson.code).to.eql(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"Electronica\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{categoryPrefix}}/222222"
+					},
+					"response": []
+				},
+				{
+					"name": "category:/id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"Electronica\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{categoryPrefix}}/{{idCategory}}"
+					},
+					"response": []
+				},
+				{
+					"name": "category correct",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    pm.expect(responseJson).to.have.property(\"name\");",
+									"    pm.expect(responseJson).to.have.property(\"description\");",
+									"    ",
+									"    pm.expect(responseJson.name).to.eql(\"Electronica\");",
+									"    pm.expect(responseJson.description).to.eql(\"Dispositivos electronicos\");",
+									"    ",
+									"    pm.collectionVariables.set(\"idCategory\", responseJson.id);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Electronica\",\n    \"description\": \"Dispositivos electronicos\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{categoryPrefix}}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Product invalid category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson).to.have.property(\"error\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\");",
+									"    pm.expect(responseJson).to.have.property(\"status\");",
+									"    pm.expect(responseJson).to.have.property(\"code\");",
+									"});",
+									"",
+									"pm.test(\"El mensaje de error es correcto\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson.error).to.eql(\"Categoria no encontrada\");",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Radio\",\n    \"description\": \"Radio Am y Fm\",\n    \"salePrice\": 1000.21,\n    \"brand\": \"LGs\",\n    \"category\": \"Electronicas\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{prefixProduct}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Product invalid fields",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 400 y los campos son correctos\", function () {",
+									"    pm.response.to.have.status(400);",
+									"    ",
+									"    var responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.all.keys(\"error\", \"userMessage\", \"status\", \"code\");",
+									"});",
+									"",
+									"pm.test(\"Los valores de error y mensaje de usuario son correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson.error).to.eql(\"Error de validación\");",
+									"    pm.expect(responseJson.userMessage).to.eql(\"El precio de venta es obligatorio \");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Radio\",\n    \"description\": \"Radio Am y Fm\",\n    \"brand\": \"LG\",\n    \"category\": \"Electronica\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{prefixProduct}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Product invalid fields 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 400 y los campos son correctos\", function () {",
+									"    pm.response.to.have.status(400);",
+									"    ",
+									"    var responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.all.keys(\"error\", \"userMessage\", \"status\", \"code\");",
+									"});",
+									"",
+									"pm.test(\"Los valores de error y mensaje de usuario son correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson.error).to.eql(\"Error de validación\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"brand\": \"LG\",\n    \"category\": \"Electronica\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{prefixProduct}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Product invalid price",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 400 y los campos existen\", function () {",
+									"    pm.response.to.have.status(400);",
+									"    ",
+									"    var responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.have.all.keys(\"error\", \"userMessage\", \"status\", \"code\");",
+									"});",
+									"",
+									"pm.test(\"Los valores de error y mensaje de usuario son correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson.error).to.eql(\"Error de validación\");",
+									"    pm.expect(responseJson.userMessage).to.eql(\"El precio de venta debe ser un valor positivo \");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Radio\",\n    \"description\": \"Radio Am y Fm\",\n    \"salePrice\": -11111.21,\n    \"brand\": \"LG\",\n    \"category\": \"Electronica\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{prefixProduct}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 201 y la respuesta tiene la estructura correcta\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    ",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.have.all.keys(",
+									"        \"cod\", \"name\", \"description\", \"category\", \"brand\", \"discount\", \"salePrice\", \"creationDate\"",
+									"    );",
+									"    ",
+									"    pm.expect(responseJson.category).to.have.all.keys(\"id\", \"name\", \"description\");",
+									"    pm.expect(responseJson.brand).to.have.all.keys(\"id\", \"name\", \"description\");",
+									"});",
+									"",
+									"pm.test(\"Los valores del producto son correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson.cod).to.be.a(\"string\");",
+									"    pm.expect(responseJson.name).to.eql(\"Radio\");",
+									"    pm.expect(responseJson.salePrice).to.be.a(\"number\");",
+									"    pm.expect(responseJson.creationDate).to.be.a(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Guardar el código del producto en variable de colección\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    pm.collectionVariables.set(\"codProd\", responseJson.cod);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Radio\",\n    \"description\": \"Radio Am y Fm\",\n    \"salePrice\": 1000.21,\n    \"brand\": \"Samsung\",\n    \"category\": \"Electronica\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{prefixProduct}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Products/:id notFound",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"La respuesta tiene la estructura correcta\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.have.all.keys(\"error\", \"userMessage\", \"status\", \"code\");",
+									"    ",
+									"    pm.expect(responseJson.error).to.be.a(\"string\");",
+									"    pm.expect(responseJson.userMessage).to.be.a(\"string\");",
+									"    pm.expect(responseJson.status).to.eql(\"NOT_FOUND\");",
+									"    pm.expect(responseJson.code).to.eql(404);",
+									"});",
+									"",
+									"pm.test(\"El mensaje de error es correcto\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson.error).to.contain(\"Producto no encontrado con Cod:\");",
+									"    pm.expect(responseJson.userMessage).to.eql(\"Producto no encontrado, verifique los detalles e intente nuevamente\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port}}/{{prefixProduct}}/dsa"
+					},
+					"response": []
+				},
+				{
+					"name": "Products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port}}/{{prefixProduct}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Products/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 200 y la respuesta tiene la estructura correcta\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    ",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.have.all.keys(",
+									"        \"cod\", \"name\", \"description\", \"category\", \"brand\", \"discount\", \"salePrice\", \"creationDate\"",
+									"    );",
+									"    ",
+									"    pm.expect(responseJson.category).to.have.all.keys(\"id\", \"name\", \"description\");",
+									"    pm.expect(responseJson.brand).to.have.all.keys(\"id\", \"name\", \"description\");",
+									"});",
+									"",
+									"pm.test(\"Los valores del producto son correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson.cod).to.be.a(\"string\");",
+									"    pm.expect(responseJson.name).to.eql(\"Radio\");",
+									"    pm.expect(responseJson.salePrice).to.be.a(\"number\");",
+									"    pm.expect(responseJson.creationDate).to.be.a(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Guardar el código del producto en variable de colección\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    pm.collectionVariables.set(\"codProd\", responseJson.cod);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port}}/{{prefixProduct}}/{{codProd}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Products/:id not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"La respuesta tiene la estructura correcta\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.have.all.keys(\"error\", \"userMessage\", \"status\", \"code\");",
+									"    ",
+									"    pm.expect(responseJson.error).to.be.a(\"string\");",
+									"    pm.expect(responseJson.userMessage).to.be.a(\"string\");",
+									"    pm.expect(responseJson.status).to.eql(\"NOT_FOUND\");",
+									"    pm.expect(responseJson.code).to.eql(404);",
+									"});",
+									"",
+									"pm.test(\"El mensaje de error es correcto\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson.error).to.contain(\"Producto no encontrado con Cod:\");",
+									"    pm.expect(responseJson.userMessage).to.eql(\"Producto no encontrado, verifique los detalles e intente nuevamente\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Radio\",\n    \"description\": \"Radio Am y Fm\",\n    \"salePrice\": 1000.21,\n    \"brand\": \"Samsung\",\n    \"category\": \"Electronica\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{prefixProduct}}/aaaaa"
+					},
+					"response": []
+				},
+				{
+					"name": "Products/:id not found Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"La respuesta tiene la estructura correcta\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.have.all.keys(\"error\", \"userMessage\", \"status\", \"code\");",
+									"    ",
+									"    pm.expect(responseJson.error).to.be.a(\"string\");",
+									"    pm.expect(responseJson.userMessage).to.be.a(\"string\");",
+									"    pm.expect(responseJson.status).to.eql(\"NOT_FOUND\");",
+									"    pm.expect(responseJson.code).to.eql(404);",
+									"});",
+									"",
+									"pm.test(\"El mensaje de error es correcto\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson.error).to.contain(\"Producto no encontrado con Cod:\");",
+									"    pm.expect(responseJson.userMessage).to.eql(\"Producto no encontrado, verifique los detalles e intente nuevamente\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Radio\",\n    \"description\": \"Radio Am y Fm\",\n    \"salePrice\": 1000.21,\n    \"brand\": \"Samsung\",\n    \"category\": \"Electronica\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{prefixProduct}}/aaaaa"
+					},
+					"response": []
+				},
+				{
+					"name": "Products/:id invalid fields",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"La respuesta tiene la estructura correcta\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.have.all.keys(\"error\", \"userMessage\", \"status\", \"code\");",
+									"    ",
+									"    pm.expect(responseJson.error).to.be.a(\"string\");",
+									"    pm.expect(responseJson.userMessage).to.be.a(\"string\");",
+									"    pm.expect(responseJson.status).to.eql(\"NOT_FOUND\");",
+									"    pm.expect(responseJson.code).to.eql(404);",
+									"});",
+									"",
+									"pm.test(\"El mensaje de error es correcto\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson.error).to.eql(\"Marca no encontrada\");",
+									"    pm.expect(responseJson.userMessage).to.eql(\"Marca no encontrada, verifique los detalles e intente nuevamente\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Radio\",\n    \"description\": \"Radio Am y Fm con conexion bluethoot\",\n    \"brand\": \"Samsunag\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{prefixProduct}}/{{codProd}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Products/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta tiene la estructura correcta\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson).to.have.all.keys(\"cod\", \"name\", \"description\", \"category\", \"brand\", \"discount\", \"salePrice\", \"creationDate\");",
+									"    ",
+									"    pm.expect(responseJson.cod).to.be.a(\"string\");",
+									"    pm.expect(responseJson.name).to.be.a(\"string\");",
+									"    pm.expect(responseJson.description).to.be.a(\"string\");",
+									"    pm.expect(responseJson.category).to.be.an(\"object\");",
+									"    pm.expect(responseJson.brand).to.be.an(\"object\");",
+									"    pm.expect(responseJson.discount).to.be.null;",
+									"    pm.expect(responseJson.salePrice).to.be.a(\"number\");",
+									"    pm.expect(responseJson.creationDate).to.be.a(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Los datos de la respuesta son correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson.name).to.eql(\"Radio Digital\");",
+									"    pm.expect(responseJson.description).to.eql(\"Radio Am y Fm con funcion de conexion Bluethoot\");",
+									"    pm.expect(responseJson.salePrice).to.eql(1500.00);",
+									"    ",
+									"  ",
+									"    pm.expect(responseJson.category.name).to.eql(\"Electronica\");",
+									"    ",
+									"    pm.expect(responseJson.brand.name).to.eql(\"Samsung\");",
+									"    pm.expect(responseJson.brand.description).to.eql(\"Aparatos Samsung\");",
+									"});",
+									"",
+									"pm.test(\"Guardar el código del producto en una variable de colección\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    pm.collectionVariables.set(\"codProd\", responseJson.cod);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Radio Digital\",\n    \"description\": \"Radio Am y Fm con funcion de conexion Bluethoot\",\n    \"salePrice\": 1500.00\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{prefixProduct}}/{{codProd}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Guardar el código del producto en variable de colección\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    pm.collectionVariables.set(\"codProd2\", responseJson.cod);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Television\",\n    \"description\": \"Television inteligente samrtv\",\n    \"salePrice\": 2000,\n    \"brand\": \"Samsung\",\n    \"category\": \"Electronica\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port}}/{{prefixProduct}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Products/:id not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"La respuesta tiene la estructura correcta\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.have.all.keys(\"error\", \"userMessage\", \"status\", \"code\");",
+									"    ",
+									"    pm.expect(responseJson.error).to.be.a(\"string\");",
+									"    pm.expect(responseJson.userMessage).to.be.a(\"string\");",
+									"    pm.expect(responseJson.status).to.eql(\"NOT_FOUND\");",
+									"    pm.expect(responseJson.code).to.eql(404);",
+									"});",
+									"",
+									"pm.test(\"El mensaje de error es correcto\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson.error).to.contain(\"Producto no encontrado con Cod:\");",
+									"    pm.expect(responseJson.userMessage).to.eql(\"Producto no encontrado, verifique los detalles e intente nuevamente\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:{{port}}/{{prefixProduct}}/ppppp"
+					},
+					"response": []
+				},
+				{
+					"name": "Products/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:{{port}}/{{prefixProduct}}/{{codProd}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Products/category-brand-price?category",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"radio\",\n    \"category\": \"Ropa\",\n    \"brand\": \"LG\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/{{prefixProduct}}/category-brand-price?category=Electronica",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{prefixProduct}}",
+								"category-brand-price"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "Electronica"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Products/category-brand-price?brand",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"radio\",\n    \"category\": \"Ropa\",\n    \"brand\": \"LG\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/{{prefixProduct}}/category-brand-price?brand=Samsung",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{prefixProduct}}",
+								"category-brand-price"
+							],
+							"query": [
+								{
+									"key": "brand",
+									"value": "Samsung"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Products/category-brand-price?price",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"radio\",\n    \"category\": \"Ropa\",\n    \"brand\": \"LG\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/{{prefixProduct}}/category-brand-price?minPrice=0&maxPrice=10000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{prefixProduct}}",
+								"category-brand-price"
+							],
+							"query": [
+								{
+									"key": "minPrice",
+									"value": "0"
+								},
+								{
+									"key": "maxPrice",
+									"value": "10000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Products/category-brand-price?price brand categ",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"radio\",\n    \"category\": \"Ropa\",\n    \"brand\": \"LG\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/{{prefixProduct}}/category-brand-price?minPrice=0&maxPrice=10000&brand=samsung&category=electronica",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{prefixProduct}}",
+								"category-brand-price"
+							],
+							"query": [
+								{
+									"key": "minPrice",
+									"value": "0"
+								},
+								{
+									"key": "maxPrice",
+									"value": "10000"
+								},
+								{
+									"key": "brand",
+									"value": "samsung"
+								},
+								{
+									"key": "category",
+									"value": "electronica"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Products/search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"radio\",\n    \"category\": \"Ropa\",\n    \"brand\": \"LG\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port}}/{{prefixProduct}}/search?word=television",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{prefixProduct}}",
+								"search"
+							],
+							"query": [
+								{
+									"key": "word",
+									"value": "television"
+								},
+								{
+									"key": "brand",
+									"value": "a",
+									"disabled": true
+								},
+								{
+									"key": "minPrice",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "maxPrice",
+									"value": "11111",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Provider",
+			"item": [
+				{
+					"name": "provider invalid fields",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos esperados\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.have.property(\"error\", \"Error de validación\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\", \"El nombre del proveedor no puede estar vacio. \");",
+									"    pm.expect(responseJson).to.have.property(\"status\", \"BAD_REQUEST\");",
+									"    pm.expect(responseJson).to.have.property(\"code\", 400);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"address\": \"Av america\",\n    \"phone\": \"123234\",\n    \"email\": \"electro@correo.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port2}}/{{prefixProvider}}"
+					},
+					"response": []
+				},
+				{
+					"name": "provider",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"La respuesta contiene un id válido\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    ",
+									"    pm.collectionVariables.set(\"idProvider\", responseJson.id);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Electro Devices\",\n    \"address\": \"Av america\",\n    \"phone\": \"123234\",\n    \"email\": \"electro@correo.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port2}}/{{prefixProvider}}"
+					},
+					"response": []
+				},
+				{
+					"name": "provider",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port2}}/{{prefixProvider}}"
+					},
+					"response": []
+				},
+				{
+					"name": "provider/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    pm.expect(responseJson).to.have.property(\"name\");",
+									"    pm.expect(responseJson).to.have.property(\"address\");",
+									"    pm.expect(responseJson).to.have.property(\"phone\");",
+									"    pm.expect(responseJson).to.have.property(\"email\");",
+									"    pm.expect(responseJson).to.have.property(\"active\");",
+									"",
+									"",
+									"});",
+									"pm.test(\"La respuesta contiene los datos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"",
+									"    pm.expect(responseJson.name).to.be.a('string').that.is.not.empty;",
+									"    pm.expect(responseJson.address).to.be.a('string').that.is.not.empty;",
+									"    pm.expect(responseJson.phone).to.be.a('string').that.is.not.empty;",
+									"    pm.expect(responseJson.email).to.be.a('string').that.includes('@');",
+									"    pm.expect(responseJson.active).to.be.a('boolean');",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port2}}/{{prefixProvider}}/{{idProvider}}"
+					},
+					"response": []
+				},
+				{
+					"name": "provider/:id notfund",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    // Verificamos que los campos estén presentes en la respuesta",
+									"    pm.expect(responseJson).to.have.property(\"error\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\");",
+									"    pm.expect(responseJson).to.have.property(\"status\");",
+									"    pm.expect(responseJson).to.have.property(\"code\");",
+									"",
+									"    // Validamos que los valores sean correctos",
+									"    pm.expect(responseJson.error).to.be.a('string').that.is.not.empty;",
+									"    pm.expect(responseJson.userMessage).to.be.a('string').that.is.not.empty;",
+									"    pm.expect(responseJson.status).to.equal(\"NOT_FOUND\");",
+									"    pm.expect(responseJson.code).to.equal(404);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port2}}/{{prefixProvider}}/c6e9afe8-6a4f-4caa-acb9-39a5d79d08ed"
+					},
+					"response": []
+				},
+				{
+					"name": "provider",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"La respuesta contiene un id válido\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    ",
+									"    pm.collectionVariables.set(\"idProvider2\", responseJson.id);",
+									"    pm.collectionVariables.set(\"nameProvider2\", responseJson.name);",
+									"",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Electro Alto\",\n    \"address\": \"Av 16 de Julio\",\n    \"phone\": \"76376267\",\n    \"email\": \"altoelectro@correo.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port2}}/{{prefixProvider}}"
+					},
+					"response": []
+				},
+				{
+					"name": "provider Conflict",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    // Verificamos que los campos estén presentes en la respuesta",
+									"    pm.expect(responseJson).to.have.property(\"error\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\");",
+									"    pm.expect(responseJson).to.have.property(\"status\");",
+									"    pm.expect(responseJson).to.have.property(\"code\");",
+									"",
+									"    // Validamos que los valores sean correctos",
+									"    pm.expect(responseJson.error).to.equal(\"Proveedor ya existe\");",
+									"    pm.expect(responseJson.userMessage).to.equal(\"Error de validacion, verifique los detalles e intente nuevamente\");",
+									"    pm.expect(responseJson.status).to.equal(\"BAD_REQUEST\");",
+									"    pm.expect(responseJson.code).to.equal(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Electro Alto\",\n    \"address\": \"Av 16 de Julio\",\n    \"phone\": \"76376267\",\n    \"email\": \"altoelectro@correo.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port2}}/{{prefixProvider}}"
+					},
+					"response": []
+				},
+				{
+					"name": "provider/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    pm.expect(responseJson).to.have.property(\"name\");",
+									"    pm.expect(responseJson).to.have.property(\"address\");",
+									"    pm.expect(responseJson).to.have.property(\"phone\");",
+									"    pm.expect(responseJson).to.have.property(\"email\");",
+									"    pm.expect(responseJson).to.have.property(\"active\");",
+									"",
+									"    pm.expect(responseJson.name).to.equal(\"proveedor111111\");",
+									"    pm.expect(responseJson.address).to.equal(\"Av america\");",
+									"    pm.expect(responseJson.phone).to.equal(\"123234\");",
+									"    pm.expect(responseJson.email).to.equal(\"electro@correo.com\");",
+									"    pm.expect(responseJson.active).to.equal(true);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"proveedor111111\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port2}}/{{prefixProvider}}/{{idProvider}}"
+					},
+					"response": []
+				},
+				{
+					"name": "provider/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:{{port2}}/{{prefixProvider}}/{{idProvider}}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "purchases",
+			"item": [
+				{
+					"name": "purchase/existing invalid provider",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson).to.have.property(\"error\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\");",
+									"    pm.expect(responseJson).to.have.property(\"status\");",
+									"    pm.expect(responseJson).to.have.property(\"code\");",
+									"",
+									"    pm.expect(responseJson.error).to.equal(\"Proveedor no encontrado\");",
+									"    pm.expect(responseJson.userMessage).to.equal(\"Proveedor no encontrado, verifique los detalles e intente nuevamente\");",
+									"    pm.expect(responseJson.status).to.equal(\"NOT_FOUND\");",
+									"    pm.expect(responseJson.code).to.equal(404);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"provider\": \"Electro lucia\",\n    \"items\": [\n        {\"productId\": \"LIEL3536\", \"quantity\": 10, \"unitPrice\": 180},\n        {\"productId\": \"RAELaa3a\", \"quantity\": 20, \"unitPrice\": 280},\n        {\"productId\": \"TEELa031\", \"quantity\": 30, \"unitPrice\": 380}\n        \n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port2}}/{{purchasePrefix}}/existing"
+					},
+					"response": []
+				},
+				{
+					"name": "purchase/existing prod not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson).to.have.property(\"error\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\");",
+									"    pm.expect(responseJson).to.have.property(\"status\");",
+									"    pm.expect(responseJson).to.have.property(\"code\");",
+									"",
+									"    pm.expect(responseJson.error).to.equal(\"Error al crear el producto: Producto no encontrado, verifique los detalles e intente nuevamente\");",
+									"    pm.expect(responseJson.userMessage).to.equal(\"Error de validacion, verifique los detalles e intente nuevamente\");",
+									"    pm.expect(responseJson.status).to.equal(\"BAD_REQUEST\");",
+									"    pm.expect(responseJson.code).to.equal(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"provider\": \"{{nameProvider2}}\",\n    \"items\": [\n        {\"productId\": \"PRO1223\", \"quantity\": 10, \"unitPrice\": 180}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port2}}/{{purchasePrefix}}/existing"
+					},
+					"response": []
+				},
+				{
+					"name": "purchase/existing qunatity null",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos y los valores esperados\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson).to.have.property(\"error\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\");",
+									"    pm.expect(responseJson).to.have.property(\"status\");",
+									"    pm.expect(responseJson).to.have.property(\"code\");",
+									"",
+									"    pm.expect(responseJson.error).to.equal(\"Error de validación\");",
+									"    pm.expect(responseJson.status).to.equal(\"BAD_REQUEST\");",
+									"    pm.expect(responseJson.code).to.equal(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"provider\": \"{{nameProvider2}}\",\n    \"items\": [\n        {\"productId\": \"{{codProd2}}\"}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port2}}/{{purchasePrefix}}/existing"
+					},
+					"response": []
+				},
+				{
+					"name": "purchase/existing invalid expirationdate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos y los valores esperados\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson).to.have.property(\"error\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\");",
+									"    pm.expect(responseJson).to.have.property(\"status\");",
+									"    pm.expect(responseJson).to.have.property(\"code\");",
+									"",
+									"    pm.expect(responseJson.error).to.equal(\"Error de validación\");",
+									"    pm.expect(responseJson.userMessage).to.equal(\"La fecha de expiracion debe ser futura \");",
+									"    pm.expect(responseJson.status).to.equal(\"BAD_REQUEST\");",
+									"    pm.expect(responseJson.code).to.equal(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"provider\": \"{{nameProvider2}}\",\n    \"items\": [\n        {\"productId\": \"{{codProd2}}\", \"quantity\": 10, \"unitPrice\": 123, \"expirationDate\": \"2024-10-10\"}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port2}}/{{purchasePrefix}}/existing"
+					},
+					"response": []
+				},
+				{
+					"name": "purchase/existing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos y valores esperados\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    pm.expect(responseJson).to.have.property(\"total\");",
+									"    pm.expect(responseJson).to.have.property(\"provider\");",
+									"    pm.expect(responseJson).to.have.property(\"items\");",
+									"    pm.expect(responseJson).to.have.property(\"canceled\");",
+									"    pm.expect(responseJson).to.have.property(\"adquisitionDate\");",
+									"",
+									"    pm.expect(responseJson.total).to.equal(1800);",
+									"    pm.expect(responseJson.canceled).to.equal(false);",
+									"    pm.expect(responseJson.adquisitionDate).to.be.null;",
+									"",
+									"    pm.expect(responseJson.provider).to.have.property(\"id\");",
+									"    pm.expect(responseJson.provider).to.have.property(\"name\");",
+									"    pm.expect(responseJson.provider).to.have.property(\"address\");",
+									"    pm.expect(responseJson.provider).to.have.property(\"phone\");",
+									"    pm.expect(responseJson.provider).to.have.property(\"email\");",
+									"    pm.expect(responseJson.provider).to.have.property(\"active\");",
+									"",
+									"    pm.expect(responseJson.provider.name).to.equal(\"Electro Alto\");",
+									"    pm.expect(responseJson.provider.address).to.equal(\"Av 16 de Julio\");",
+									"    pm.expect(responseJson.provider.phone).to.equal(\"76376267\");",
+									"    pm.expect(responseJson.provider.email).to.equal(\"altoelectro@correo.com\");",
+									"    pm.expect(responseJson.provider.active).to.equal(true);",
+									"",
+									"    pm.expect(responseJson.items).to.be.an('array').that.is.not.empty;",
+									"    pm.expect(responseJson.items[0]).to.have.property(\"id\");",
+									"    pm.expect(responseJson.items[0]).to.have.property(\"productId\");",
+									"    pm.expect(responseJson.items[0]).to.have.property(\"quantity\");",
+									"    pm.expect(responseJson.items[0]).to.have.property(\"unitPrice\");",
+									"    pm.expect(responseJson.items[0]).to.have.property(\"expirationDate\");",
+									"",
+									"    pm.expect(responseJson.items[0].quantity).to.equal(10);",
+									"    pm.expect(responseJson.items[0].unitPrice).to.equal(180);",
+									"    pm.expect(responseJson.items[0].expirationDate).to.equal(\"2027-10-10\");",
+									"",
+									"      pm.collectionVariables.set(\"idPurchase1\", responseJson.id);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"provider\": \"{{nameProvider2}}\",\n    \"items\": [\n        {\"productId\": \"{{codProd2}}\", \"quantity\": 10, \"unitPrice\": 180, \"expirationDate\": \"2027-10-10\"}\n        \n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port2}}/{{purchasePrefix}}/existing"
+					},
+					"response": []
+				},
+				{
+					"name": "purchase/new inalid product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"El error y el mensaje de usuario son correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson).to.have.property(\"error\", \"Error al crear el producto: El nombre del producto no puede estar vacio \");",
+									"",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\", \"Error de validacion, verifique los detalles e intente nuevamente\");",
+									"",
+									"    pm.expect(responseJson).to.have.property(\"status\", \"BAD_REQUEST\");",
+									"",
+									"    pm.expect(responseJson).to.have.property(\"code\", 400);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"provider\": \"{{nameProvider2}}\",\n    \"items\": [\n        {\"product\": {\n           \n            \"description\": \"Licuadora marca oster \",\n            \"salePrice\": 1000.10,\n            \"brand\": \"Oster\",\n            \"category\": \"Electronica\"\n        } , \"quantity\": 100, \"unitPrice\": 290}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port2}}/{{purchasePrefix}}/new"
+					},
+					"response": []
+				},
+				{
+					"name": "purchase/new",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos principales correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    pm.expect(responseJson).to.have.property(\"total\");",
+									"    pm.expect(responseJson.provider).to.have.property(\"id\");",
+									"    pm.expect(responseJson.provider).to.have.property(\"name\");",
+									"    pm.expect(responseJson.items).to.be.an(\"array\").that.is.not.empty;",
+									"",
+									"    pm.expect(responseJson.adquisitionDate).to.be.null;",
+									"    pm.expect(responseJson.items[0].expirationDate).to.be.null;",
+									"    pm.collectionVariables.set(\"idPurchase2\", responseJson.id);",
+									"",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"provider\": \"{{nameProvider2}}\",\n    \"items\": [\n        {\n            \"product\": {\n                \"name\": \"Licuadora\",\n                \"description\": \"Licuadora marca Oster\",\n                \"salePrice\": 1000.10,\n                \"brand\": \"Samsung\",\n                \"category\": \"Electronica\"\n            },\n            \"quantity\": 100,\n            \"unitPrice\": 290\n        }\n    ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port2}}/{{purchasePrefix}}/new"
+					},
+					"response": []
+				},
+				{
+					"name": "purchase",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port2}}/{{purchasePrefix}}"
+					},
+					"response": []
+				},
+				{
+					"name": "purchase/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"El código de estado es 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos correctos y valores esperados\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    pm.expect(responseJson).to.have.property(\"total\");",
+									"    pm.expect(responseJson).to.have.property(\"provider\");",
+									"    pm.expect(responseJson).to.have.property(\"items\");",
+									"    pm.expect(responseJson).to.have.property(\"canceled\");",
+									"    pm.expect(responseJson).to.have.property(\"adquisitionDate\");",
+									"",
+									"",
+									"    pm.expect(responseJson.provider).to.have.property(\"id\");",
+									"    pm.expect(responseJson.provider).to.have.property(\"name\");",
+									"    pm.expect(responseJson.provider).to.have.property(\"address\");",
+									"    pm.expect(responseJson.provider).to.have.property(\"phone\");",
+									"    pm.expect(responseJson.provider).to.have.property(\"email\");",
+									"    pm.expect(responseJson.provider).to.have.property(\"active\");",
+									"",
+									"",
+									"    pm.expect(responseJson.items).to.be.an('array').that.is.not.empty;",
+									"    pm.expect(responseJson.items[0]).to.have.property(\"id\");",
+									"    pm.expect(responseJson.items[0]).to.have.property(\"productId\");",
+									"    pm.expect(responseJson.items[0]).to.have.property(\"quantity\");",
+									"    pm.expect(responseJson.items[0]).to.have.property(\"unitPrice\");",
+									"    pm.expect(responseJson.items[0]).to.have.property(\"expirationDate\");",
+									"",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port2}}/{{purchasePrefix}}/{{idPurchase1}}"
+					},
+					"response": []
+				},
+				{
+					"name": "purchase/:id not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"La respuesta contiene el código de estado esperado\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos principales correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson).to.have.property(\"error\");",
+									"    pm.expect(responseJson).to.have.property(\"userMessage\");",
+									"    pm.expect(responseJson).to.have.property(\"status\");",
+									"    pm.expect(responseJson).to.have.property(\"code\");",
+									"",
+									"    pm.expect(responseJson.error).to.equal(\"Compra no encontrada\");",
+									"    pm.expect(responseJson.userMessage).to.equal(\"Compra no encontrada, verifique los detalles e intente nuevamente\");",
+									"    pm.expect(responseJson.status).to.equal(\"NOT_FOUND\");",
+									"    pm.expect(responseJson.code).to.equal(404);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port2}}/{{purchasePrefix}}/61e29e3b-f3a3-43e9-a69a-c14e126a3e82"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Stock",
+			"item": [
+				{
+					"name": "stock",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"",
+									"pm.test(\"La respuesta contiene los campos principales correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    pm.expect(responseJson).to.have.property(\"quantity\");",
+									"    pm.expect(responseJson).to.have.property(\"purchaseUnitCost\");",
+									"    pm.expect(responseJson).to.have.property(\"totalPurchaseCost\");",
+									"    pm.expect(responseJson).to.have.property(\"providerId\");",
+									"    pm.expect(responseJson).to.have.property(\"productId\");",
+									"    pm.expect(responseJson).to.have.property(\"purchaseDate\");",
+									"    pm.expect(responseJson).to.have.property(\"expiryDate\");",
+									"",
+									"    var product = responseJson.productId;",
+									"    pm.expect(product).to.have.property(\"cod\");",
+									"    pm.expect(product).to.have.property(\"name\");",
+									"    pm.expect(product).to.have.property(\"category\");",
+									"    pm.expect(product).to.have.property(\"brand\");",
+									"    pm.expect(product).to.have.property(\"salePrice\");",
+									"",
+									"    pm.collectionVariables.set(\"idStock\", responseJson.id);",
+									"",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 100,\n    \"purchaseUnitCost\": 120,\n    \"providerId\": \"{{idProvider2}}\",\n    \"productId\": \"{{codProd2}}\",\n    \"purchaseDate\": \"2025-03-26\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port3}}/{{stockPrefix}}"
+					},
+					"response": []
+				},
+				{
+					"name": "stock",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8090/api/v1/inventory-server/stock"
+					},
+					"response": []
+				},
+				{
+					"name": "stock:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los campos principales correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    pm.expect(responseJson).to.have.property(\"quantity\");",
+									"    pm.expect(responseJson).to.have.property(\"purchaseUnitCost\");",
+									"    pm.expect(responseJson).to.have.property(\"totalPurchaseCost\");",
+									"    pm.expect(responseJson).to.have.property(\"providerId\");",
+									"    pm.expect(responseJson).to.have.property(\"productId\");",
+									"    pm.expect(responseJson).to.have.property(\"purchaseDate\");",
+									"    pm.expect(responseJson).to.have.property(\"expiryDate\");",
+									"",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port3}}/{{stockPrefix}}/{{idStock}}"
+					},
+					"response": []
+				},
+				{
+					"name": "stock:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"La respuesta contiene los campos principales correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    pm.expect(responseJson).to.have.property(\"quantity\");",
+									"    pm.expect(responseJson).to.have.property(\"purchaseUnitCost\");",
+									"    pm.expect(responseJson).to.have.property(\"totalPurchaseCost\");",
+									"    pm.expect(responseJson).to.have.property(\"providerId\");",
+									"    pm.expect(responseJson).to.have.property(\"productId\");",
+									"    pm.expect(responseJson).to.have.property(\"purchaseDate\");",
+									"    pm.expect(responseJson).to.have.property(\"expiryDate\");",
+									"});",
+									"",
+									"pm.test(\"La respuesta contiene los valores correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson.quantity).to.equal(90);",
+									"    pm.expect(responseJson.purchaseUnitCost).to.equal(100);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 90,\n    \"purchaseUnitCost\": 100\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port3}}/{{stockPrefix}}/{{idStock}}"
+					},
+					"response": []
+				},
+				{
+					"name": "stock/total",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 2222,\n    \"purchaseUnitCost\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port3}}/{{stockPrefix}}/total?productId={{codProd2}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port3}}",
+							"path": [
+								"{{stockPrefix}}",
+								"total"
+							],
+							"query": [
+								{
+									"key": "productId",
+									"value": "{{codProd2}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "stock/oldest",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 2222,\n    \"purchaseUnitCost\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port3}}/{{stockPrefix}}/oldest?productId={{codProd2}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port3}}",
+							"path": [
+								"{{stockPrefix}}",
+								"oldest"
+							],
+							"query": [
+								{
+									"key": "productId",
+									"value": "{{codProd2}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "stock/expiring",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 2222,\n    \"purchaseUnitCost\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port3}}/{{stockPrefix}}/expiring?days=1000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port3}}",
+							"path": [
+								"{{stockPrefix}}",
+								"expiring"
+							],
+							"query": [
+								{
+									"key": "days",
+									"value": "1000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "stock/threshold",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 2222,\n    \"purchaseUnitCost\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port3}}/{{stockPrefix}}/threshold?threshold=200&category=Electronica",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port3}}",
+							"path": [
+								"{{stockPrefix}}",
+								"threshold"
+							],
+							"query": [
+								{
+									"key": "threshold",
+									"value": "200"
+								},
+								{
+									"key": "category",
+									"value": "Electronica"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "stock/threshold Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 2222,\n    \"purchaseUnitCost\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port3}}/{{stockPrefix}}/threshold?threshold=200",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port3}}",
+							"path": [
+								"{{stockPrefix}}",
+								"threshold"
+							],
+							"query": [
+								{
+									"key": "threshold",
+									"value": "200"
+								},
+								{
+									"key": "category",
+									"value": "Ropa",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "stock/between-dates",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 2222,\n    \"purchaseUnitCost\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{port3}}/{{stockPrefix}}/between-dates?startDate=2025-01-01&endDate=2025-04-01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port3}}",
+							"path": [
+								"{{stockPrefix}}",
+								"between-dates"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2025-01-01"
+								},
+								{
+									"key": "endDate",
+									"value": "2025-04-01"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "stock/status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port3}}/{{stockPrefix}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "inventory/register-purchase",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 100,\n    \"purchaseUnitCost\": 11,\n    \"providerId\": \"f0a432c5-e633-4277-9b7a-42c84bf945ad\",\n    \"productId\": \"RAROaa3a\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port3}}/{{inventoryPrefix}}/register-purchase"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Kardex",
+			"item": [
+				{
+					"name": "kardex",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"La respuesta contiene los campos principales correctos\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.collectionVariables.set(\"isKardex\", responseJson.id);",
+									"",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"typeMovement\": \"OUTCOME\",\n    \"quantity\": 10,\n    \"productId\": \"{{codProd2}}\",\n    \"unitPrice\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port3}}/{{kardexPrefix}}"
+					},
+					"response": []
+				},
+				{
+					"name": "kardex/id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La cantidad debe ser exactamente 20\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson.quantity).to.eql(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 200\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port3}}/{{kardexPrefix}}/{{isKardex}}"
+					},
+					"response": []
+				},
+				{
+					"name": "kardex/product-history/id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port3}}/{{kardexPrefix}}/product-history/{{codProd2}}"
+					},
+					"response": []
+				},
+				{
+					"name": "kardex/inventory-movements",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port3}}/{{kardexPrefix}}/inventory-movements?startDate=2025-01-01&endDate=2025-05-01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port3}}",
+							"path": [
+								"{{kardexPrefix}}",
+								"inventory-movements"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2025-01-01"
+								},
+								{
+									"key": "endDate",
+									"value": "2025-05-01"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "kardex/inventory-movements/id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port3}}/{{kardexPrefix}}/inventory-movements/{{codProd2}}?startDate=2025-01-01&endDate=2025-05-01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port3}}",
+							"path": [
+								"{{kardexPrefix}}",
+								"inventory-movements",
+								"{{codProd2}}"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2025-01-01"
+								},
+								{
+									"key": "endDate",
+									"value": "2025-05-01"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "kardex/most-sold-products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port3}}/{{kardexPrefix}}/most-sold-products?limit=1&startDate=2025-01-01&endDate=2025-05-01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port3}}",
+							"path": [
+								"{{kardexPrefix}}",
+								"most-sold-products"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "1"
+								},
+								{
+									"key": "startDate",
+									"value": "2025-01-01"
+								},
+								{
+									"key": "endDate",
+									"value": "2025-05-01"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "kardex/earnings-report",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port3}}/{{kardexPrefix}}/earnings-report?startDate=2025-01-01&endDate=2025-05-01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port3}}",
+							"path": [
+								"{{kardexPrefix}}",
+								"earnings-report"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2025-01-01"
+								},
+								{
+									"key": "endDate",
+									"value": "2025-05-01"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "kardex/id Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 200\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port3}}/{{kardexPrefix}}/{{isKardex}}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sales",
+			"item": [
+				{
+					"name": "sale missing fields",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Debe verificar los errores en la respuesta\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson.error).to.eql(\"Error de validación\");",
+									"    pm.expect(responseJson.userMessage).to.include(\"Debe ingresar el metodo de pago\");",
+									"    pm.expect(responseJson.userMessage).to.include(\"Debe ingresar el nombre del cliente\");",
+									"",
+									"    pm.expect(responseJson.status).to.eql(\"BAD_REQUEST\");",
+									"    pm.expect(responseJson.code).to.eql(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"saleDetails\": [\n         {\"productId\": \"TEELa031\", \"quantity\": 20, \"unitPrice\": 3900}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port4}}/{{salePrefix}}"
+					},
+					"response": []
+				},
+				{
+					"name": "sale invalid product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Debe verificar los errores relacionados con el producto no encontrado\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson.error).to.eql(\"Error con el producto: TEELa0311 Producto no encontrado con Cod: TEELa0311 Producto no encontrado, verifique los detalles e intente nuevamente\");",
+									"    ",
+									"    pm.expect(responseJson.userMessage).to.eql(\"Error de validacion, verifique los detalles e intente nuevamente\");",
+									"",
+									"    pm.expect(responseJson.status).to.eql(\"BAD_REQUEST\");",
+									"    pm.expect(responseJson.code).to.eql(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerName\": \"Juan Perez\",\n    \"paymentMethod\": \"Efectivo\",\n    \"saleDetails\": [\n         {\"productId\": \"TEELa0311\", \"quantity\": 20, \"unitPrice\": 90000}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port4}}/{{salePrefix}}"
+					},
+					"response": []
+				},
+				{
+					"name": "sale invalid price",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Debe verificar el error relacionado con el precio de venta fuera del rango permitido\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									" ",
+									"    pm.expect(responseJson.userMessage).to.eql(\"Error de validacion, verifique los detalles e intente nuevamente\");",
+									"",
+									"    pm.expect(responseJson.status).to.eql(\"BAD_REQUEST\");",
+									"    pm.expect(responseJson.code).to.eql(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerName\": \"Juan Perez\",\n    \"paymentMethod\": \"Efectivo\",\n    \"saleDetails\": [\n         {\"productId\": \"TEELa031\", \"quantity\": 20, \"unitPrice\": 3900}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port4}}/{{salePrefix}}"
+					},
+					"response": []
+				},
+				{
+					"name": "sale insufficient stock",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Debe verificar el error relacionado con el stock insuficiente para el producto\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson.error).to.include(\"Stock valido insuficiente para el producto con ID\");",
+									"    ",
+									"    pm.expect(responseJson.userMessage).to.eql(\"Error de validacion, verifique los detalles e intente nuevamente\");",
+									"",
+									"    pm.expect(responseJson.status).to.eql(\"BAD_REQUEST\");",
+									"    pm.expect(responseJson.code).to.eql(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerName\": \"Juan Perez\",\n    \"paymentMethod\": \"Efectivo\",\n    \"saleDetails\": [\n         {\"productId\": \"TEELa031\", \"quantity\": 20000, \"unitPrice\": 3900}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port4}}/{{salePrefix}}"
+					},
+					"response": []
+				},
+				{
+					"name": "sale invalid discount",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Debe verificar que el error sea 'El descuento no puede ser mayor que el precio unitario'\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson.error).to.eql(\"El descuento no puede ser mayor que el precio unitariio\");",
+									"    ",
+									"    pm.expect(responseJson.userMessage).to.eql(\"Error de validacion, verifique los detalles e intente nuevamente\");",
+									"",
+									"    pm.expect(responseJson.status).to.eql(\"BAD_REQUEST\");",
+									"    pm.expect(responseJson.code).to.eql(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerName\": \"Juan Perez\",\n    \"paymentMethod\": \"Efectivo\",\n    \"saleDetails\": [\n         {\"productId\": \"TEELa031\", \"quantity\": 20, \"unitPrice\": 3900, \"discount\": 40000}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port4}}/{{salePrefix}}"
+					},
+					"response": []
+				},
+				{
+					"name": "sale",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Debe verificar que la venta se haya registrado correctamente\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson.totalAmount).to.eql(2000);",
+									"    pm.collectionVariables.set(\"idSale\", responseJson.id);",
+									"",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerName\": \"Juan Perez\",\n    \"paymentMethod\": \"Efectivo\",\n    \"saleDetails\": [\n         {\"productId\": \"{{codProd2}}\", \"quantity\": 20, \"unitPrice\": 100}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:{{port4}}/{{salePrefix}}"
+					},
+					"response": []
+				},
+				{
+					"name": "sale/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Validar la respuesta del detalle de la venta\", function () {",
+									"    var responseJson = pm.response.json();",
+									"",
+									"    pm.expect(responseJson).to.have.property('id');",
+									"    pm.expect(responseJson).to.have.property('saleDate');",
+									"    pm.expect(responseJson).to.have.property('totalAmount');",
+									"    pm.expect(responseJson).to.have.property('customerName');",
+									"    pm.expect(responseJson).to.have.property('paymentMethod');",
+									"    pm.expect(responseJson).to.have.property('totalDiscount');",
+									"    pm.expect(responseJson).to.have.property('saleDetails');",
+									"",
+									"    ",
+									"    pm.expect(responseJson.saleDetails).to.be.an('array').that.is.not.empty;",
+									"    ",
+									"    responseJson.saleDetails.forEach(function (item) {",
+									"        pm.expect(item).to.have.property('id');",
+									"        pm.expect(item).to.have.property('productId');",
+									"        pm.expect(item).to.have.property('quantity');",
+									"        pm.expect(item).to.have.property('unitPrice');",
+									"        pm.expect(item).to.have.property('subtotal');",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port4}}/{{salePrefix}}/{{idSale}}"
+					},
+					"response": []
+				},
+				{
+					"name": "sale/by-dates",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port4}}/{{salePrefix}}/by-dates?startDate=2025-01-20&endDate=2025-04-20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port4}}",
+							"path": [
+								"{{salePrefix}}",
+								"by-dates"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2025-01-20"
+								},
+								{
+									"key": "endDate",
+									"value": "2025-04-20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sale/by-product",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:{{port4}}/{{salePrefix}}/by-product/{{codProd2}}"
+					},
+					"response": []
+				},
+				{
+					"name": "sale/by-product/:id/dates",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port4}}/{{salePrefix}}/by-product/{{codProd2}}/dates?startDate=2025-02-11&endDate=2025-04-11",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port4}}",
+							"path": [
+								"{{salePrefix}}",
+								"by-product",
+								"{{codProd2}}",
+								"dates"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2025-02-11"
+								},
+								{
+									"key": "endDate",
+									"value": "2025-04-11"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sale/by-customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port4}}/{{salePrefix}}/by-customer?customerName=Juan Perez",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port4}}",
+							"path": [
+								"{{salePrefix}}",
+								"by-customer"
+							],
+							"query": [
+								{
+									"key": "customerName",
+									"value": "Juan Perez"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sale/by-customer/dates",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port4}}/{{salePrefix}}/by-customer/dates?startDate=2025-01-01&endDate=2025-04-01&customerName=Juan Perez",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port4}}",
+							"path": [
+								"{{salePrefix}}",
+								"by-customer",
+								"dates"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2025-01-01"
+								},
+								{
+									"key": "endDate",
+									"value": "2025-04-01"
+								},
+								{
+									"key": "customerName",
+									"value": "Juan Perez"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sale/by-price/greater-than",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"La respuesta es un array y tiene al menos un elemento\", function () {",
+									"    var responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.be.an('array');",
+									"    ",
+									"    pm.expect(responseJson.length).to.be.at.least(0);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{port4}}/{{salePrefix}}/by-price/greater-than?price=10000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port4}}",
+							"path": [
+								"{{salePrefix}}",
+								"by-price",
+								"greater-than"
+							],
+							"query": [
+								{
+									"key": "price",
+									"value": "10000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sale/:id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:{{port4}}/{{salePrefix}}/{{idSale}}"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "port",
+			"value": "8081"
+		},
+		{
+			"key": "brandPrefix",
+			"value": "brand"
+		},
+		{
+			"key": "categoryPrefix",
+			"value": "category"
+		},
+		{
+			"key": "prefixProduct",
+			"value": "product"
+		},
+		{
+			"key": "port2",
+			"value": "8082"
+		},
+		{
+			"key": "prefixProvider",
+			"value": "provider"
+		},
+		{
+			"key": "purchasePrefix",
+			"value": "purchase"
+		},
+		{
+			"key": "port3",
+			"value": "8083"
+		},
+		{
+			"key": "stockPrefix",
+			"value": "stock"
+		},
+		{
+			"key": "kardexPrefix",
+			"value": "kardex"
+		},
+		{
+			"key": "inventoryPrefix",
+			"value": "inventory"
+		},
+		{
+			"key": "port4",
+			"value": "8084"
+		},
+		{
+			"key": "salePrefix",
+			"value": "sale"
+		},
+		{
+			"key": "IdBrand",
+			"value": ""
+		},
+		{
+			"key": "idCategory",
+			"value": ""
+		},
+		{
+			"key": "codProd",
+			"value": ""
+		},
+		{
+			"key": "codProd2",
+			"value": ""
+		},
+		{
+			"key": "idProvider",
+			"value": ""
+		},
+		{
+			"key": "idProvider2",
+			"value": ""
+		},
+		{
+			"key": "nameProvider2",
+			"value": ""
+		},
+		{
+			"key": "idPurchase1",
+			"value": ""
+		},
+		{
+			"key": "idPurchase2",
+			"value": ""
+		},
+		{
+			"key": "idStock",
+			"value": ""
+		},
+		{
+			"key": "isKardex",
+			"value": ""
+		},
+		{
+			"key": "idSale",
+			"value": ""
+		}
+	]
+}
